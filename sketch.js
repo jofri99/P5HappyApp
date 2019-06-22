@@ -7,7 +7,9 @@ var y = 50;
 var offSetY = 0;
 var mousePosP;
 var offSetOld;
-
+var dropzone;
+var img=-1;
+var input;
 function preload() {
   img1 = loadImage("images/essenQuadrat.jpg");
   img2 = loadImage("images/skateQuadrat.jpg");
@@ -17,6 +19,13 @@ function preload() {
 }
 
 function setup() {
+  input = createInput();
+  input.position(100,500);
+  input.hide();
+  dropzone = select('#dropzone');
+  dropzone.dragOver(highlight);
+  dropzone.dragLeave(unHighlight)
+  dropzone.drop(handleFile);
   picCArr.push(new Pic(img1, 0, 0, 0, 0,"Food"));
   picCArr.push(new Pic(img2, 0, 0, 0, 0,"Sport"));
   picCArr.push(new Pic(img3, 0, 0, 0, 0,"Car"));
@@ -41,6 +50,11 @@ function mouseClicked() {
       if(mouseX<150 && mouseX>50 && mouseY < 70 && mouseY > 20){
         screen = 2; 
       }
+    //Check if 'Aktivität hinzufügen' Button is clicked
+    if(mouseX<470 && mouseX>270 && mouseY < 70 && mouseY > 20){
+      screen = 3; 
+      dropzone.style("visibility","visible");
+    }
     //Check if a picture is clicked
       for (let i = 0; i < picCArr.length; i++) {
         if (mouseX > picCArr[i].X && mouseX < picCArr[i].X + picCArr[i].WIDTH &&
@@ -51,6 +65,18 @@ function mouseClicked() {
       break;
     case 2:
       break;
+    
+   
+    case 3:
+        300,495,30,30
+        if(mouseX<330 && mouseX>300 && mouseY < 525 && mouseY > 495){
+         addActivity(img,input.value);
+         input.value = '';
+         input.hide();
+         screen = 1;
+        }
+        
+        break;
   }
 }
 
@@ -99,18 +125,74 @@ function draw() {
           y += picCArr[i].HEIGHT  + 30;
         }
       }
-      rect(50 ,20,100,50);
+      
+      fill(255);
+      rect(200,20,270,50);
+      fill(0);
       textSize(30);
+      text('Aktivität hinzufügen',205,55);
+
+      fill(255)
+      rect(50,20,100,50);
+      textSize(30);
+      fill(0);
       text('Weiter',55,55);
+
+ 
       break;
     case 2:
       rect(20, 20, 20, 20);
       break;
+    case 3:
+      input.show();
+      
+      fill(255, 255, 255, 255);
+      textSize(20);
+      text("Beschreibung",100,495)
+
+      rect(300,495,30,30);
+      fill(0,0,0,255);
+      textSize(30);
+      text("+",307,522);
+      if(img != -1){
+        image(img,100,100,img.width/2,img.height/2);
+      }
+        if(img.width != 500 || img.height != 500){
+          fill(255, 255, 255, 255);
+          text("500x500 Bild in Box legen.",100,100);
+        }else
+        {
+          
+        }
+      break;
   }
+  
 }
 
 function picClicked(i){
   print("A pic was clicked");
   usedPicArr.push(picCArr[i]);
   picCArr.splice(i,1);
+}
+
+function addActivity(img,desc) {
+  var newPic = new Pic(img,0,0,500/3,500/3,desc)
+  picCArr.push(newPic);
+}
+
+const highlight = () => {
+  dropzone.style('background-color','#ccc');
+}
+
+const unHighlight = () => {
+  dropzone.style('background-color','#fff');
+}
+
+
+
+const handleFile = (file) => {
+  unHighlight();
+  img = createImg(file.data);
+  img.hide();
+  console.log(img);
 }
