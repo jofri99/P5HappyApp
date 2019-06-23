@@ -1,4 +1,4 @@
-let img1, img2, img3,img4,img5;
+let img1, img2, img3,img4,img5,smileyHappy,smileyOK,smileySad;
 let picArr = [];
 let picCArr = [];
 let usedPicArr = [];
@@ -16,6 +16,9 @@ function preload() {
   img3 = loadImage("images/autoQuadrat.jpg");
   img4 = loadImage("images/wandererQuadrat.jpg");
   img5 = loadImage("images/meditationQuadrat.jpg");
+  smileyHappy = loadImage("images/smiley_happy.png");
+  smileyOK = loadImage("images/smiley_OK.png");
+  smileySad = loadImage("images/smiley_sad.png");
 }
 
 function setup() {
@@ -26,12 +29,12 @@ function setup() {
   dropzone.dragOver(highlight);
   dropzone.dragLeave(unHighlight)
   dropzone.drop(handleFile);
-  picCArr.push(new Pic(img1, 0, 0, 0, 0,"Food"));
+  picCArr.push(new Pic(img1, 0, 0, 0, 0,"Essen"));
   picCArr.push(new Pic(img2, 0, 0, 0, 0,"Sport"));
-  picCArr.push(new Pic(img3, 0, 0, 0, 0,"Car"));
-  picCArr.push(new Pic(img4, 0, 0, 0, 0,"Hiking"));
+  picCArr.push(new Pic(img3, 0, 0, 0, 0,"Auto"));
+  picCArr.push(new Pic(img4, 0, 0, 0, 0,"Wandern"));
   picCArr.push(new Pic(img5, 0, 0, 0, 0,"Meditation"));
-  picCArr.push(new Pic(img1, 0, 0, 0, 0,"Food"));
+  picCArr.push(new Pic(img1, 0, 0, 0, 0,"Essen"));
   picCArr.push(new Pic(img2, 0, 0, 0, 0,"Sport"));
   //push all pictures in an Array as a Pic(Class)
   createCanvas(500, 750);
@@ -64,19 +67,33 @@ function mouseClicked() {
       }
       break;
     case 2:
-      break;
+        if(mouseX<170 && mouseX>20 && mouseY < 400 && mouseY > 250){
+          writeData(usedPicArr,3);
+          screen = 4;
+        }else if(mouseX<330 && mouseX>180 && mouseY < 400 && mouseY > 250){
+          writeData(usedPicArr,2);
+          screen = 4;
+        }else if(mouseX<490 && mouseX>340 && mouseY < 400 && mouseY > 250){
+          writeData(usedPicArr,1);
+          screen = 4;
+        }
+        break;
+      
     
    
     case 3:
-        300,495,30,30
         if(mouseX<330 && mouseX>300 && mouseY < 525 && mouseY > 495){
+         console.log(img);
          addActivity(img,input.value);
          input.value = '';
          input.hide();
+         dropzone.style('visibility','hidden');
          screen = 1;
         }
         
         break;
+    case 4:
+          break;
   }
 }
 
@@ -141,7 +158,11 @@ function draw() {
  
       break;
     case 2:
-      rect(20, 20, 20, 20);
+      fill(255);
+      text("Wie hast du dich heute gefühlt?",50,50);
+      image(smileyHappy,20,250,150,150);
+      image(smileyOK,180,250,150,150);
+      image(smileySad,340,250,150,150);
       break;
     case 3:
       input.show();
@@ -165,19 +186,24 @@ function draw() {
           
         }
       break;
+      case 4:
+        text("Auswertung: ",100,100); 
+        break;
   }
   
 }
 
 function picClicked(i){
   print("A pic was clicked");
-  usedPicArr.push(picCArr[i]);
+  usedPicArr.push(picCArr[i].DESC);
   picCArr.splice(i,1);
 }
 
 function addActivity(img,desc) {
-  var newPic = new Pic(img,0,0,500/3,500/3,desc)
-  picCArr.push(newPic);
+  if(img != -1){
+    var newPic = new Pic(img,0,0,500/3,500/3,desc)
+    picCArr.push(newPic);
+  }
 }
 
 const highlight = () => {
@@ -196,3 +222,4 @@ const handleFile = (file) => {
   img.hide();
   console.log(img);
 }
+
