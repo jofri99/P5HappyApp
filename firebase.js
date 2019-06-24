@@ -22,10 +22,10 @@ var firebaseConfig = {
     var keys = Object.keys(dataArr);
     console.log(keys);
     console.log(data.val());
-    var feel,ac,k= keys[i];
+    var feel,ac,k;
     
-    console.log(feel);
     for(var i = 0; i<keys.length;i++){
+      k = keys[i];
       feel = dataArr[k].feelToday;
       ac = dataArr[k].activites;
       console.log(ac);

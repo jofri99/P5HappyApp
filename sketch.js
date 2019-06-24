@@ -203,6 +203,7 @@ function addActivity(img,desc) {
   if(img != -1){
     var newPic = new Pic(img,0,0,500/3,500/3,desc)
     picCArr.push(newPic);
+    console.log(picCArr[picCArr.length-1]);
   }
 }
 
