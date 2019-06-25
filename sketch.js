@@ -10,6 +10,7 @@ var offSetOld;
 var dropzone;
 var img=-1;
 var input;
+var best,worst,bestVal = 0,worstVal=10000000;
 function preload() {
   img1 = loadImage("images/essenQuadrat.jpg");
   img2 = loadImage("images/skateQuadrat.jpg");
@@ -70,12 +71,44 @@ function mouseClicked() {
         if(mouseX<170 && mouseX>20 && mouseY < 400 && mouseY > 250){
           writeData(usedPicArr,3);
           screen = 4;
+          for(var i = 0; i<finalArr.length; i++){
+            if(finalArr[i][1]> bestVal){
+              best = finalArr[i][0];
+              bestVal = finalArr[i][1];
+            }
+            if(finalArr[i][1]<worstVal){
+              worst = finalArr[i][0];
+              worstVal = finalArr[i][1];
+            }
+          }
         }else if(mouseX<330 && mouseX>180 && mouseY < 400 && mouseY > 250){
           writeData(usedPicArr,2);
           screen = 4;
+          for(var i = 0; i<finalArr.length; i++){
+            if(finalArr[i][1]> bestVal){
+              best = finalArr[i][0];
+              bestVal = finalArr[i][1];
+            }
+            if(finalArr[i][1]<worstVal){
+              worst = finalArr[i][0];
+              worstVal = finalArr[i][1];
+            }
+          }
         }else if(mouseX<490 && mouseX>340 && mouseY < 400 && mouseY > 250){
           writeData(usedPicArr,1);
           screen = 4;
+          for(var i = 0; i<finalArr.length; i++){
+            if(finalArr[i][1]> bestVal){
+              best = finalArr[i][0];
+              bestVal = finalArr[i][1];
+            }
+            if(finalArr[i][1]<worstVal){
+              worst = finalArr[i][0];
+              worstVal = finalArr[i][1];
+            }
+          }
+        }else if(mouseX<150 && mouseX>50 && mouseY < 70 && mouseY > 20){
+          screen = 1; 
         }
         break;
       
@@ -83,8 +116,7 @@ function mouseClicked() {
    
     case 3:
         if(mouseX<330 && mouseX>300 && mouseY < 525 && mouseY > 495){
-         console.log(img);
-         addActivity(img,input.value);
+         addActivity(img,input.value());
          input.value = '';
          input.hide();
          dropzone.style('visibility','hidden');
@@ -93,6 +125,19 @@ function mouseClicked() {
         
         break;
     case 4:
+        50,20,130,50
+        if(mouseX<180 && mouseX>50 && mouseY < 70 && mouseY > 20){
+          usedPicArr = [];
+          picCArr = [];
+          picCArr.push(new Pic(img1, 0, 0, 0, 0,"Essen"));
+          picCArr.push(new Pic(img2, 0, 0, 0, 0,"Sport"));
+          picCArr.push(new Pic(img3, 0, 0, 0, 0,"Auto"));
+          picCArr.push(new Pic(img4, 0, 0, 0, 0,"Wandern"));
+          picCArr.push(new Pic(img5, 0, 0, 0, 0,"Meditation"));
+          picCArr.push(new Pic(img1, 0, 0, 0, 0,"Essen"));
+          picCArr.push(new Pic(img2, 0, 0, 0, 0,"Sport"));
+          screen = 0;
+         }
           break;
   }
 }
@@ -114,8 +159,10 @@ function draw() {
   background(51);
   switch (screen) {
     case 0:
+      fill(255)
       circle(245,380,140);
       textSize(32);
+      fill(0);
       text('Wie war dein Tag?', 115, 390);
       break;
     case 1:
@@ -158,8 +205,13 @@ function draw() {
  
       break;
     case 2:
+      fill(255)
+      rect(50,20,100,50);
+      textSize(30);
+      fill(0);
+      text('Zurück',55,55);
       fill(255);
-      text("Wie hast du dich heute gefühlt?",50,50);
+      text("Wie hast du dich heute gefühlt?",50,150);
       image(smileyHappy,20,250,150,150);
       image(smileyOK,180,250,150,150);
       image(smileySad,340,250,150,150);
@@ -181,13 +233,19 @@ function draw() {
         if(img.width != 500 || img.height != 500){
           fill(255, 255, 255, 255);
           text("500x500 Bild in Box legen.",100,100);
-        }else
-        {
-          
         }
       break;
       case 4:
-        text("Auswertung: ",100,100); 
+        fill(255)
+        rect(50,20,130,50);
+        textSize(30);
+        fill(0);
+        text('Nochmal',55,55);
+        fill(255);
+        text("Das macht dich glücklich: ",100,150);
+        text(best,100,200 )
+        text("Das Macht dich unglücklich: ",100,250)
+        text(worst,100,300);
         break;
   }
   
@@ -203,7 +261,6 @@ function addActivity(img,desc) {
   if(img != -1){
     var newPic = new Pic(img,0,0,500/3,500/3,desc)
     picCArr.push(newPic);
-    console.log(picCArr[picCArr.length-1]);
   }
 }
 
@@ -221,6 +278,5 @@ const handleFile = (file) => {
   unHighlight();
   img = createImg(file.data);
   img.hide();
-  console.log(img);
 }
 

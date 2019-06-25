@@ -15,36 +15,45 @@ var firebaseConfig = {
   dbRef.on('value',gotData,errData);
   var ac = ["heheh","fd","saff"];
   var feeling = 2;
-  
+  var finalArr;
 
   function gotData(data){
     var dataArr = data.val();
     var keys = Object.keys(dataArr);
-    console.log(keys);
-    console.log(data.val());
-    var feel,ac,k;
+    var feel = [],ac = [],k;
     
     for(var i = 0; i<keys.length;i++){
       k = keys[i];
-      feel = dataArr[k].feelToday;
-      ac = dataArr[k].activites;
-      console.log(ac);
-      console.log("--------------");
+      feel[i] = dataArr[k].feelToday;
+      ac[i] = dataArr[k].activites;
     }
+    console.log("Write Feeling");
+
     writeFeeling(ac,feel)
   }
 
 
   function writeFeeling(ac,feel){
-    var arr = [["Sport",0],["Essen",0],["Wandern",0]]
+    finalArr = [["Sport",0],["Essen",0],["Wandern",0]];
+    var a;
     for(var i = 0; i<ac.length;i++){
-      a = ac[i];
-      for(var j = 0; j<arr.length;j++){
-        if(a == arr[j][0]){
-          console.log(arr[j][0]);
+       a = ac[i];
+      for(var h = 0; h< a.length;h++){
+        var exist = false;
+        for(var j = 0; j<finalArr.length;j++){
+          if(a[h] == finalArr[j][0]){
+            finalArr[j][1]+=feel[i];
+            exist = true;
+          }
+        }
+        if(!exist){
+          finalArr.push([a[h],feel[i]]);
         }
       }
+    }
 
+    for(var i = 0; i<finalArr.length;i++){
+      console.log(finalArr[i][0]+": "+finalArr[i][1]);
     }
   }
 
@@ -54,11 +63,13 @@ var firebaseConfig = {
   }
   
   function writeData(acti,feeling){
-    var newDayRef = dbRef.push();
-    newDayRef.set({
-        feelToday: feeling,
-        activites: acti
-      });
+    if(acti.length > 0){
+      var newDayRef = dbRef.push();
+      newDayRef.set({
+          feelToday: feeling,
+          activites: acti
+        });
+    }
     }
 
 
