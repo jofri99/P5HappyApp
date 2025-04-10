@@ -1,2 +1,2 @@
 # P5HappyApp
-A student work
+A student assignment
